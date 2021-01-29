@@ -28,10 +28,16 @@
         let painting =false
         //创建一个变量用于存放第一个点的坐标
         let last
-
-
         //判断屏幕是否支持触屏
         var isTouchDevice = 'ontouchstart' in document.documentElement;
+
+        //友好提示
+        if(isTouchDevice){
+          alert('用手触摸屏幕开始绘画');      
+        }else{
+          alert('鼠标按下开始绘画'); 
+        }        
+
         if(isTouchDevice){
             //支持触屏，则使用ontouchstart和ontouchmove监听触摸的开始和结束
             canvas.ontouchstart = (e) =>{
