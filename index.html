@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我要画丁老头</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="canvas">
+    </canvas>
+    <script>
+        //指定在canvas画布上的绘制类型为2d
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        //动态设置canvas的宽高为浏览器窗口文档显示区域的宽高
+        canvas.width=document.documentElement.clientWidth
+        canvas.height=document.documentElement.clientHeight
+        //设置图形填充颜色
+        ctx.fillStyle = "black"
+        //设置图形轮廓的颜色
+        ctx.strokeStyle = "black"
+        //设置线条宽度
+        ctx.lineWidth = 6
+        //设置线条末端样式
+        ctx.lineCap = "round"
+        //创建一个布尔变量判断用户是否在绘画中
+        let painting =false
+        //创建一个变量用于存放第一个点的坐标
+        let last
+
+
+        //判断屏幕是否支持触屏
+        var isTouchDevice = 'ontouchstart' in document.documentElement;
+        if(isTouchDevice){
+            //支持触屏，则使用ontouchstart和ontouchmove监听触摸的开始和结束
+            canvas.ontouchstart = (e) =>{
+                last = [e.touches[0].clientX,e.touches[0].clientY]//记录最后一个点的坐标
+            }
+            canvas.ontouchmove = (e) =>{
+                drawLine(last[0],last[1],e.touches[0].clientX,e.touches[0].clientY) //画线
+                last = [e.touches[0].clientX,e.touches[0].clientY] //更新最后一个点的坐标
+            }
+          
+        }else{
+            //不支持触屏，则使用onmousedown、onmouseup和onmousemove监听鼠标按下，停止按住，按中的三个状态
+          canvas.onmousedown = (e) =>{
+            painting = true //鼠标按下，设置绘画状态为true
+            last = [e.clientX,e.clientY] //记录最后一个点的坐标
+          }
+          canvas.onmousemove = (e) =>{
+              if(painting === true){//判断绘画状态是否为true
+              drawLine(last[0],last[1],e.clientX,e.clientY)//画线
+              last = [e.clientX,e.clientY]//更新最后一个点的坐标
+            }
+          }
+          canvas.onmouseup = () =>{
+            painting =false //鼠标停止按住状态，将绘画状态改为false
+          } 
+           
+        }
+
+        //画线
+        function drawLine(x1,y1,x2,y2){
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+    </script>
+    
+</body>
+</html>
