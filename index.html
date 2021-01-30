@@ -11,11 +11,13 @@
     </canvas>
     <script>
         //指定在canvas画布上的绘制类型为2d
-        var canvas = document.getElementById('canvas');
-        var ctx = canvas.getContext('2d');
+        let canvas = document.getElementById('canvas');
+        let ctx = canvas.getContext('2d');
         //动态设置canvas的宽高为浏览器窗口文档显示区域的宽高
-        canvas.width=document.documentElement.clientWidth
-        canvas.height=document.documentElement.clientHeight
+        let clientWidth=document.documentElement.clientWidth
+        let clientHeight=document.documentElement.clientHeight
+        canvas.width=clientWidth
+        canvas.height=clientHeight
         //设置图形填充颜色
         ctx.fillStyle = "black"
         //设置图形轮廓的颜色
@@ -29,7 +31,7 @@
         //创建一个变量用于存放第一个点的坐标
         let last
         //判断屏幕是否支持触屏
-        var isTouchDevice = 'ontouchstart' in document.documentElement;
+        let isTouchDevice = 'ontouchstart' in document.documentElement;
 
         //友好提示
         if(isTouchDevice){
@@ -39,6 +41,9 @@
         }        
 
         if(isTouchDevice){
+          document.body.addEventListener('touchmove', function (e) {
+          e.preventDefault(); //阻止默认的处理方式(阻止下拉滑动的效果)
+          }, {passive: false});
             //支持触屏，则使用ontouchstart和ontouchmove监听触摸的开始和结束
             canvas.ontouchstart = (e) =>{
                 last = [e.touches[0].clientX,e.touches[0].clientY]//记录最后一个点的坐标
